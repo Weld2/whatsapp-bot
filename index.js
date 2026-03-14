@@ -28,7 +28,7 @@ app.post('/webhook', async (req, res) => {
       const text = message.text.body;
       try {
         const groqRes = await axios.post('https://api.groq.com/openai/v1/chat/completions', {
-          model: 'llama3-8b-8192',
+          model: 'llama-3.3-70b-versatile',
           messages: [
             { role: 'system', content: SYSTEM_PROMPT },
             { role: 'user', content: text }
