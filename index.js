@@ -34,16 +34,28 @@ app.post('/webhook', async (req, res) => {
             { role: 'user', content: text }
           ]
         }, {
-          headers: { 'Authorization': `Bearer ${GROQ_API_KEY}` }
+          headers: { 
+            'Authorization': `Bearer ${GROQ_API_KEY}`,
+            'Content-Type': 'application/json'
+          }
         });
+
         const reply = groqRes.data.choices[0].message.content;
+
         await axios.post(`https://graph.facebook.com/v22.0/${PHONE_NUMBER_ID}/messages`, {
           messaging_product: 'whatsapp',
           to: from,
+          type: 'text',
           text: { body: reply }
         }, {
-          headers: { 'Authorization': `Bearer ${WHATSAPP_TOKEN}` }
+          headers: { 
+            'Authorization': `Bearer ${WHATSAPP_TOKEN}`,
+            'Content-Type': 'application/json'
+          }
         });
+
+        console.log('Message envoyé à', from, ':', reply);
+
       } catch (err) {
         console.error('Erreur:', err.response?.data || err.message);
       }
